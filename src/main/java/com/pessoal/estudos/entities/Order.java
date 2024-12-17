@@ -2,6 +2,7 @@ package com.pessoal.estudos.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pessoal.estudos.entities.enums.OrderStatus;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -19,6 +20,8 @@ public class Order implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant data;
 
+    private Integer status;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -26,9 +29,10 @@ public class Order implements Serializable {
 
     public Order() {
     }
-    public Order(Long id, Instant data, User client) {
+    public Order(Long id, Instant data, OrderStatus status, User client) {
         this.id = id;
         this.data = data;
+        setStatus(status);
         this.client = client;
     }
 
@@ -46,6 +50,16 @@ public class Order implements Serializable {
 
     public void setData(Instant data) {
         this.data = data;
+    }
+
+    public OrderStatus getStatus() {
+        return OrderStatus.valueOf(status);
+    }
+
+    public void setStatus(OrderStatus status) {
+        if (status != null) {
+            this.status = status.getValue();
+        }
     }
 
     public User getClient() {
