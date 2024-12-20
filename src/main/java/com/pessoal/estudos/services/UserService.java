@@ -2,10 +2,12 @@ package com.pessoal.estudos.services;
 
 import com.pessoal.estudos.entities.User;
 import com.pessoal.estudos.repositories.UserRepository;
+import com.pessoal.estudos.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -18,8 +20,8 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        User user = userRepository.findById(id).get();
-        return user;
+        Optional<User> user = userRepository.findById(id);
+        return user.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public User insert(User user) {
